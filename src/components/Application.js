@@ -37,8 +37,8 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu"><DayList
               days={days}
-              day={day}
-              setDay={setDay}
+              value={day}
+              onChance={setDay}
             /> 
         </nav>
         <img
