@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import InterviewerListItem from "./InterviewerListItem";
 import "./InterviewerList.scss"
 
 export default function InterviewerList(props) {
-
+  console.log("interviewList", props)
+  console.log("props.interviewers", props.interviewers)
   const interviewers = props.interviewers.map((interviewer) => {
     return (
       <InterviewerListItem
@@ -16,7 +17,7 @@ export default function InterviewerList(props) {
       setInterviewer={() => props.onChange(interviewer.id)}  
       />
     );
-  });
+  }); 
 
   return(
     <section className="interviewers">
