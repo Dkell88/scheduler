@@ -2,6 +2,7 @@ import React ,{ useState } from "react";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
+const axios = require('axios').default;
 
 const appointments = {
   "1": {
@@ -61,6 +62,12 @@ const days = [
 ];
 
 export default function Application(props) {
+
+  axios.get("http://localhost:8001/api/days")
+  .then((response) => {
+    console.log(response);
+  }).catch((err) =>
+    console.log(err));
 
   const [day, setDay] = useState("Monday")
   
