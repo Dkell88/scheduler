@@ -3,6 +3,7 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview } from "components/helpers/selectors";
+import useVisualMode from "hooks/useVisualMode";
 //const {getAppointmentsForDay} = require("components/helpers/selectors")
 const axios = require('axios').default;
 
@@ -42,13 +43,14 @@ export default function Application(props) {
 
   const appointmentArr = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview)
-
+    console.log(interview)
     return (<Appointment 
       key={appointment.id} 
       //{...appointment}
       id={appointment.id} 
       time={appointment.time} 
       interview={interview} 
+      interviewers={Object.values(state.interviewers)}
     />)
   })
 
