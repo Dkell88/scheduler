@@ -12,7 +12,8 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: []
+    appointments: [],
+    interviewers: []
   });
   const setDay = day => setState({ ...state, day });
   // const [day, setDay] = useState('Monday');
@@ -32,8 +33,7 @@ export default function Application(props) {
       axios.get(`http://localhost:8001/api/interviewers`),
     ])
     .then(all => {
-      console.log(all[2].data)
-      setState(prev => ({...prev, appointments: all[1].data, days:all[0].data}))
+      setState(prev => ({...prev, appointments: all[1].data, days:all[0].data, interviewers: all[2].data}))
     })
     .catch((e) => console.log(e));
   }, []);

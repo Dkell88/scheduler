@@ -1,7 +1,6 @@
 export const getAppointmentsForDay = (state, day) => {
 
   const filteredDays = state.days.filter(d => d.name === day);
-
   if(!filteredDays.length) return [];
 
   const filteredApps = filteredDays[0].appointments.map((apps) =>{
