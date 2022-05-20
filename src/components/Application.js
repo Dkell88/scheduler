@@ -2,7 +2,7 @@ import React ,{ useState, useEffect } from "react";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import {getAppointmentsForDay, getInterview} from "components/helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "components/helpers/selectors";
 //const {getAppointmentsForDay} = require("components/helpers/selectors")
 const axios = require('axios').default;
 
@@ -76,6 +76,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {appointmentArr}
+      <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
