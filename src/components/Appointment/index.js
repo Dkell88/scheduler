@@ -29,11 +29,11 @@ export default function Appointment (props) {
   
  }
  const onCancel = () => {
-   console.log("Cancle")
-  
+   console.log("Cancel")
+   back();  
  }
  const onChange = () => {
-  console.log("Cancle")
+  console.log("onChange")
  
 }
 
