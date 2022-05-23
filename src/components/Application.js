@@ -15,10 +15,10 @@ export default function Application(props) {
     interviewers: []
   });
   let dailyAppointments = []; 
+ 
   const setDay = day => setState({ ...state, day });
 
   const bookInterview = (id, interview)  => {
-    console.log(id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -27,13 +27,30 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    console.log("before axios call", interview)
-    return axios.put(`http://localhost:8001/api/appointments/:${id}`, {interview, id})
+    return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview, id})
     .then(() => {
       console.log("inside then promise within App")
       setState((prev) => ({...prev, appointments }));
       return null
     })
+  };
+
+  const cancelInterview = (id) => {
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    }
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`, {id})
+    .then(() =>{
+      console.log("Deleted")
+      setState((prev) => ({...prev, appointments}));
+    })
+
   };
 
   useEffect(() => {
@@ -61,6 +78,7 @@ export default function Application(props) {
       interview={interview} 
       interviewers={interviewers}
       book={bookInterview}
+      cancel={cancelInterview}
     />)
   })
 
