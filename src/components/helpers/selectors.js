@@ -20,12 +20,7 @@ export const getInterview = (state, interview) => {
   return returnedApp
 };
 
-
-
 export const getInterviewersForDay = (state, day) => {
-
-  console.log("state.days ", state.days)
-  console.log("day ", day)
 
   const filteredDays = state.days.filter(d => d.name === day);
   if(!filteredDays.length) return [];

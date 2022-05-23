@@ -14,17 +14,28 @@ export default function Application(props) {
     appointments: [],
     interviewers: []
   });
-  const setDay = day => setState({ ...state, day });
-  // const [day, setDay] = useState('Monday');
-  // const [days, setDays] = useState([]);
-  
-  // axios.get("http://localhost:8001/api/days")
-  // .then((response) => {
-    //   console.log("Hardcoded GET request", response);
-    // }).catch((err) =>
-    //   console.log(err));
   let dailyAppointments = []; 
-    
+  const setDay = day => setState({ ...state, day });
+
+  const bookInterview = (id, interview)  => {
+    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log("before axios call", interview)
+    return axios.put(`http://localhost:8001/api/appointments/:${id}`, {interview, id})
+    .then(() => {
+      console.log("inside then promise within App")
+      setState((prev) => ({...prev, appointments }));
+      return null
+    })
+  };
+
   useEffect(() => {
     Promise.all([
       axios.get(`http://localhost:8001/api/days`),
@@ -49,6 +60,7 @@ export default function Application(props) {
       time={appointment.time} 
       interview={interview} 
       interviewers={interviewers}
+      book={bookInterview}
     />)
   })
 
