@@ -25,14 +25,9 @@ export default function Appointment (props) {
    props.interview ? SHOW : EMPTY
   );
 
- const onAdd = () => {
-  transition(CREATE)
- };
-
  const save = (name, interviewer) => {
+  if(!name || !interviewer) return transition(ERROR)
 
-   if(!name || !interviewer) return transition(ERROR)
-   
   statusMessage = "Saving"
   transition(STATUS)
 
@@ -40,7 +35,6 @@ export default function Appointment (props) {
     student: name,
     interviewer
   };
-
   props.book(props.id, interview)
   .then(() => {
     transition(SHOW)
@@ -51,27 +45,12 @@ export default function Appointment (props) {
   });
 };
 
- const onCancel = () => {
-   console.log("Cancel")
-   back();  
- };
-
- const onChange = () => {
-  console.log("onChange")
-};
-
- const onClose = () => {
-  console.log("onClose")
-  back()
-};
-
-const onConfirm = () => {
-  console.log("onConfirm") 
+const confirm = () => {
+ 
   statusMessage = "Deleting"
   transition(STATUS,true)
   props.cancel(props.id)
   .then(() => {
-    console.log("Index appoinmtment deleted")
     transition(EMPTY)
   })
   .catch(err => {
@@ -80,22 +59,23 @@ const onConfirm = () => {
   });
 };
 
- const onDelete = () => {
-  console.log("onDelete")
-  transition(CONFIRM)
-};
-
-
   return (
     <article className="appointment">
       <Header time={props.time}/>
-      {mode === SHOW && (<Show student={props.interview.student} interviewer={props.interview.interviewer} onDelete={onDelete} onEdit={() => transition(EDIT)}/>)}
-      {mode === EMPTY && (<Empty onAdd={onAdd}/> )}
-      {mode === CREATE && (<Form onSave={save} onCancel={onCancel}  interviewers={props.interviewers} onChange={onChange}/>)}
-      {mode === EDIT && (<Form onSave={save} onCancel={onCancel}  interviewers={props.interviewers} onChange={onChange} student={props.interview.student} interviewer={props.interview.interviewer.id}/>)}
+
+      {mode === SHOW && (<Show student={props.interview.student} interviewer={props.interview.interviewer} onDelete={() => transition(CONFIRM)} onEdit={() => transition(EDIT)}/>)}
+
+      {mode === EMPTY && (<Empty onAdd={() => transition(CREATE)}/> )}
+
+      {mode === CREATE && (<Form onSave={save} onCancel={back}  interviewers={props.interviewers}/>)}
+
+      {mode === EDIT && (<Form onSave={save} onCancel={back}  interviewers={props.interviewers} student={props.interview.student} interviewer={props.interview.interviewer.id}/>)}
+
       {mode === STATUS && (<Status message={statusMessage}/> )}
-      {mode === ERROR && (<Error onClose={onClose}/>)}
-      {mode === CONFIRM && (<Confirm onCancel={onClose} onConfirm={onConfirm}/>)}
+
+      {mode === ERROR && (<Error onClose={back}/>)}
+
+      {mode === CONFIRM && (<Confirm onCancel={back} onConfirm={confirm}/>)}
    
     </article>
   );
