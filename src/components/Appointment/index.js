@@ -20,12 +20,10 @@ const EDIT = "EDIT"
 let statusMessage = "";
 
 export default function Appointment (props) {
-
-
- const {mode, transition, back } = useVisualMode(
-  props.interview ? SHOW : EMPTY
- );
-
+  
+  const {mode, transition, back } = useVisualMode(
+   props.interview ? SHOW : EMPTY
+  );
 
  const onAdd = () => {
   transition(CREATE)
@@ -68,14 +66,18 @@ export default function Appointment (props) {
 };
 
 const onConfirm = () => {
-  console.log("onConfirm")
+  console.log("onConfirm") 
   statusMessage = "Deleting"
-  transition(STATUS)
+  transition(STATUS,true)
   props.cancel(props.id)
   .then(() => {
     console.log("Index appoinmtment deleted")
     transition(EMPTY)
   })
+  .catch(err => {
+    console.log(err.message)
+    transition(ERROR, true)
+  });
 };
 
  const onDelete = () => {
@@ -90,7 +92,7 @@ const onConfirm = () => {
       {mode === SHOW && (<Show student={props.interview.student} interviewer={props.interview.interviewer} onDelete={onDelete} onEdit={() => transition(EDIT)}/>)}
       {mode === EMPTY && (<Empty onAdd={onAdd}/> )}
       {mode === CREATE && (<Form onSave={save} onCancel={onCancel}  interviewers={props.interviewers} onChange={onChange}/>)}
-      {mode === EDIT && (<Form onSave={save} onCancel={onCancel}  interviewers={props.interviewers} onChange={onChange} student={props.student} interviewer={props.interviewer}/>)}
+      {mode === EDIT && (<Form onSave={save} onCancel={onCancel}  interviewers={props.interviewers} onChange={onChange} student={props.interview.student} interviewer={props.interview.interviewer.id}/>)}
       {mode === STATUS && (<Status message={statusMessage}/> )}
       {mode === ERROR && (<Error onClose={onClose}/>)}
       {mode === CONFIRM && (<Confirm onCancel={onClose} onConfirm={onConfirm}/>)}
