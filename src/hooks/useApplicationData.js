@@ -1,63 +1,72 @@
 import { useState, useEffect } from "react";
 const axios = require('axios').default;
 
+const updateSpots = (prevState, appointments) => {
+  const selectedDay = prevState.days.find(day => day.name === prevState.day)
+  const spots = selectedDay.appointments.filter(id => !appointments[id].interview).length
+
+  const dayId = prevState.days.findIndex(day => day.name === prevState.day)
+  const day = {
+    ...prevState.days[dayId],
+    spots
+  }
+  let days = [
+    ...prevState.days 
+  ]
+  days[dayId] = day
+
+  return days
+
+}
+
 export default function useApplicationData() {
-  const [prevState, setState] = useState({
+  const [state, setState] = useState({
     day: "Monday",
     days: [],
     appointments: [],
     interviewers: []
   });
+  
 
-  const setDay = day => setState({ ...prevState, day });
+  const setDay = day => setState({ ...state, day });
 
   const bookInterview = (id, interview)  => {
     const appointment = {
-      ...prevState.appointments[id],
+      ...state.appointments[id],
       interview: { ...interview }
     };
     const appointments = {
-      ...prevState.appointments,
+      ...state.appointments,
       [id]: appointment
     };
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview, id})
     .then(() => {
-      console.log("inside then promise within App")
-      setState((prev) => ({...prev, appointments }));
-      //updateSpots(id)
-      return null
+      setState((prev) => {
+         const days = updateSpots(prev, appointments)
+        return ({...prev, appointments, days})
+      });
+  
     })
   };
 
   const cancelInterview = (id) => {
     const appointment = {
-      ...prevState.appointments[id],
+      ...state.appointments[id],
       interview: null
     }
     const appointments = {
-      ...prevState.appointments,
+      ...state.appointments,
       [id]: appointment
     }
     return axios.delete(`http://localhost:8001/api/appointments/${id}`, {id})
     .then(() =>{
-      console.log("Deleted")
-      setState((prev) => ({...prev, appointments}));
-      //updateSpots(id)
+      setState((prev) => {
+        const days = updateSpots(prev, appointments)
+        return ({...prev, appointments, days})
+      });
     })
   };
 
-  const updateSpots = (id) => {
-    //console.log("updateSpots - id: ", id)
-    const selectedDay = prevState.days.find(day => day.name === prevState.day)
-    console.log("updateSpots selectedDay:", selectedDay)
-    const appointmentsIDs = selectedDay.appointments
-    console.log("appointments ", appointmentsIDs)
-    const spots = selectedDay.appointments.filter(id => !prevState.appointments[id].interview).length
-    console.log("updateSpots spots:", spots)
-
-    const updatedState = {...prevState, days: [...prevState.days], }
-
-  }
 
   useEffect(() => {
     Promise.all([
@@ -74,5 +83,5 @@ export default function useApplicationData() {
 
 
 
-  return {state: prevState, setDay, bookInterview, cancelInterview}
+  return {state, setDay, bookInterview, cancelInterview}
 }
