@@ -20,9 +20,16 @@ export default function Form(props) {
       setError("Please select an interviewer");
       return;
     }
-  
+    
+    setError("");
     props.onSave(student, interviewer);
   }
+  const reset = () => {
+      setError("");
+      setStudent("");
+      setInterviewer(null);
+      props.onCancel()
+    }
 
   return(
     <main className="appointment__card appointment__card--create">
@@ -47,7 +54,7 @@ export default function Form(props) {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={props.onCancel}>Cancel</Button>
+          <Button danger onClick={reset}>Cancel</Button>
           <Button confirm onClick={validate}>Save</Button>
         </section>
       </section>
