@@ -3,10 +3,10 @@ describe("should book an interview", () => {
   beforeEach(() => {
     cy.request("GET", "http://localhost:8001/api/debug/reset");
     cy.visit("/");
+    cy.contains("Monday");
   })
 
   it("should visit root", () => {
-    cy.contains("Monday");
     
     cy.get("[alt=Add]")
     .first()
@@ -51,5 +51,5 @@ describe("should book an interview", () => {
     cy.contains(".appointment__card--show", "Archie Cohen")
       .should("not.exist");
   });
-  
+
 });

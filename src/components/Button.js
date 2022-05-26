@@ -9,11 +9,11 @@ export default function Button(props) {
   });
 
   return (<button 
-                onClick={props.onClick} 
-                className={buttonClass} 
-                disabled={props.disabled}
-                >
-                {props.children}
-          </button>
-          );
+    onClick={props.onClick} 
+    className={buttonClass} 
+    disabled={props.disabled}
+    >
+    {props.children}
+    </button>
+    );
 }
