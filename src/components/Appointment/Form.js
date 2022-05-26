@@ -1,18 +1,15 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import InterviewerList from "components/InterviewList";
-import Button from "components/Button"
-
-
+import Button from "components/Button";
 
 export default function Form(props) {
-  
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const [error, setError]= useState("");
+  const [error, setError] = useState("");
 
+  function validate() {
+    // Validate form entry to ensure the student and interviewer was entered
 
-  function validate() { // Validate form entry to ensure the student and interviewer was entered
-  
     if (student === "") {
       setError("Student name cannot be blank");
       return;
@@ -21,22 +18,23 @@ export default function Form(props) {
       setError("Please select an interviewer");
       return;
     }
-    
+
     setError("");
     props.onSave(student, interviewer);
   }
 
-  const reset = () => { // Reset the form and close out the component
-      setError("");
-      setStudent("");
-      setInterviewer(null);
-      props.onCancel()
-    }
+  const reset = () => {
+    // Reset the form and close out the component
+    setError("");
+    setStudent("");
+    setInterviewer(null);
+    props.onCancel();
+  };
 
-  return(
+  return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form autoComplete="off" onSubmit={event => event.preventDefault()}>
+        <form autoComplete="off" onSubmit={(event) => event.preventDefault()}>
           <input
             className="appointment__create-input text--semi-bold"
             name="name"
@@ -48,18 +46,22 @@ export default function Form(props) {
           />
         </form>
         <section className="appointment__validation">{error}</section>
-        <InterviewerList 
-          interviewers={props.interviewers} 
-          onChange = {setInterviewer}
-          value = {interviewer}
+        <InterviewerList
+          interviewers={props.interviewers}
+          onChange={setInterviewer}
+          value={interviewer}
         />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={reset}>Cancel</Button>
-          <Button confirm onClick={validate}>Save</Button>
+          <Button danger onClick={reset}>
+            Cancel
+          </Button>
+          <Button confirm onClick={validate}>
+            Save
+          </Button>
         </section>
       </section>
     </main>
-    );
-}
+  );
+};
